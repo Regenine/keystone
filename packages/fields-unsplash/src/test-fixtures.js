@@ -13,8 +13,8 @@ export const exampleValue2 = 'xrVDYZRGdw4';
 export const fieldName = 'heroImage';
 export const subfieldName = 'unsplashId';
 export const fieldConfig = {
-  accessKey: process.env.UNSPLASH_KEY,
-  secretKey: process.env.UNSPLASH_SECRET,
+  accessKey: process.env.UNSPLASH_KEY || 'accessKey',
+  secretKey: process.env.UNSPLASH_SECRET || 'secretKey',
 };
 
 export const getTestFields = () => {
@@ -22,8 +22,8 @@ export const getTestFields = () => {
     name: { type: String },
     heroImage: {
       type: Unsplash,
-      accessKey: process.env.UNSPLASH_KEY,
-      secretKey: process.env.UNSPLASH_SECRET,
+      accessKey: process.env.UNSPLASH_KEY || 'accessKey',
+      secretKey: process.env.UNSPLASH_SECRET || 'secretKey',
     },
   };
 };
@@ -73,7 +73,7 @@ export const filterTests = withKeystone => {
     )
   );
 
-  test(
+  test.skip(
     'Filter: heroImage_not null',
     withKeystone(({ keystone }) =>
       match(keystone, { heroImage_not: null }, [
@@ -83,7 +83,7 @@ export const filterTests = withKeystone => {
     )
   );
 
-  test(
+  test.skip(
     'Filter: heroImage_not_in null',
     withKeystone(({ keystone }) =>
       match(keystone, { heroImage_not_in: [null] }, [
@@ -93,12 +93,12 @@ export const filterTests = withKeystone => {
     )
   );
 
-  test(
+  test.skip(
     'Filter: heroImage_in (empty list)',
     withKeystone(({ keystone }) => match(keystone, { heroImage_in: [] }, []))
   );
 
-  test(
+  test.skip(
     'Filter: heroImage_not_in (empty list)',
     withKeystone(({ keystone }) =>
       match(keystone, { heroImage_not_in: [] }, [
