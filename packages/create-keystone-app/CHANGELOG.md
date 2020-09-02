@@ -1,5 +1,15 @@
 # create-keystone-app
 
+## 3.3.3
+
+### Patch Changes
+
+- [`4bc27e7ed`](https://github.com/keystonejs/keystone/commit/4bc27e7ed8dea155b3b32a107cc799bf20b967b5) [#3525](https://github.com/keystonejs/keystone/pull/3525) Thanks [@renovate](https://github.com/apps/renovate)! - Updated dependency `nuxt` to `^2.14.4`.
+
+- Updated dependencies [[`e9bc4367a`](https://github.com/keystonejs/keystone/commit/e9bc4367ac31f3fe3a2898198c600c76c42165b2), [`003b856e6`](https://github.com/keystonejs/keystone/commit/003b856e686cc1ee0f984c1acf024c1fa0c27837), [`16fba3b98`](https://github.com/keystonejs/keystone/commit/16fba3b98271410e570a370f610da7cd0686f294)]:
+  - @keystonejs/adapter-knex@11.0.4
+  - @keystonejs/adapter-mongoose@9.0.5
+
 ## 3.3.2
 
 ### Patch Changes
