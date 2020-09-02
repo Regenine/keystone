@@ -1,5 +1,5 @@
 // We don't currently have uniqueness tests for Relationship field types
-import { createItem, getItem, getItems, updateItem } from '@keystonejs/server-side-graphql-client';
+import { getItems } from '@keystonejs/server-side-graphql-client';
 import { Text } from '@keystonejs/fields';
 import { Content } from './index';
 
@@ -13,11 +13,12 @@ const DOC3 =
 // Configurations
 export const name = 'Content';
 export { Content as type };
-export const supportsUnique = true;
+export const supportsUnique = false;
 export const fieldName = 'body';
 export const subfieldName = 'document';
-export const exampleValue = { disconnectAll: true, create: { document: DOC1 } };
-export const exampleValue2 = { disconnectAll: true, create: { document: DOC2 } };
+export const skipRequiredTest = true;
+export const exampleValue = { create: { document: DOC1 } };
+export const exampleValue2 = { create: { document: DOC2 } };
 export const createReturnedValue = DOC1;
 export const updateReturnedValue = DOC2;
 
@@ -32,7 +33,6 @@ export const initItems = () => [
   {
     name: 'a',
     body: {
-      disconnectAll: true,
       create: {
         document: DOC1,
       },
@@ -41,7 +41,6 @@ export const initItems = () => [
   {
     name: 'b',
     body: {
-      disconnectAll: true,
       create: {
         document: DOC2,
       },
@@ -50,7 +49,6 @@ export const initItems = () => [
   {
     name: 'c',
     body: {
-      disconnectAll: true,
       create: {
         document: DOC3,
       },
@@ -59,7 +57,6 @@ export const initItems = () => [
   {
     name: 'd',
     body: {
-      disconnectAll: true,
       create: {
         document: null,
       },
@@ -391,110 +388,4 @@ export const filterTests = withKeystone => {
       ])
     )
   );
-};
-
-export const crudTests = withKeystone => {
-  const withHelpers = wrappedFn => {
-    return async ({ keystone, listKey }) => {
-      const items = await getItems({
-        keystone,
-        listKey,
-        sortBy: 'name_ASC',
-        returnFields: 'id body { document }',
-      });
-      return wrappedFn({ keystone, listKey, items });
-    };
-  };
-
-  test(
-    'Create',
-    withKeystone(
-      withHelpers(async ({ keystone, listKey }) => {
-        const data = await createItem({
-          keystone,
-          listKey,
-          item: { name: 'bold content', body: { disconnectAll: true, create: { document: DOC1 } } },
-          returnFields: 'body { document }',
-        });
-        expect(data).not.toBe(null);
-        expect(data.body.document).toBe(DOC1);
-      })
-    )
-  );
-
-  test(
-    'Read',
-    withKeystone(
-      withHelpers(async ({ keystone, listKey, items }) => {
-        const data = await getItem({
-          keystone,
-          listKey,
-          itemId: items[0].id,
-          returnFields: 'body { document }',
-        });
-        expect(data).not.toBe(null);
-        expect(data.body.document).toBe(items[0].body.document);
-      })
-    )
-  );
-
-  describe('Update', () => {
-    test(
-      'Updating the document value',
-      withKeystone(
-        withHelpers(async ({ keystone, items, listKey }) => {
-          const data = await updateItem({
-            keystone,
-            listKey,
-            item: {
-              id: items[0].id,
-              data: { body: { disconnectAll: true, create: { document: DOC2 } } },
-            },
-            returnFields: 'body { document }',
-          });
-          expect(data).not.toBe(null);
-          expect(data.body.document).toBe(DOC2);
-        })
-      )
-    );
-
-    test(
-      'Updating the document value to null',
-      withKeystone(
-        withHelpers(async ({ keystone, items, listKey }) => {
-          const data = await updateItem({
-            keystone,
-            listKey,
-            item: {
-              id: items[0].id,
-              data: { body: { disconnectAll: true, create: { document: null } } },
-            },
-            returnFields: 'body { document }',
-          });
-          expect(data).not.toBe(null);
-          expect(data.body.document).toBe(null);
-        })
-      )
-    );
-
-    test(
-      'Updating without this field',
-      withKeystone(
-        withHelpers(async ({ keystone, items, listKey }) => {
-          const data = await updateItem({
-            keystone,
-            listKey,
-            item: {
-              id: items[0].id,
-              data: { name: 'Keystone User Guide' },
-            },
-            returnFields: 'name body { document }',
-          });
-          expect(data).not.toBe(null);
-          expect(data.name).toBe('Keystone User Guide');
-          expect(data.body.document).toBe(items[0].body.document);
-        })
-      )
-    );
-  });
 };

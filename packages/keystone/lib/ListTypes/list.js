@@ -628,13 +628,15 @@ module.exports = class List {
           ...create,
         ].filter(id => !!id);
       } else {
-        return create && create[0]
-          ? create[0]
-          : connect && connect[0]
-          ? connect[0]
-          : disconnect && disconnect[0]
-          ? null
-          : currentValue;
+        if (create && create[0]) {
+          return create[0];
+        } else if (connect && connect[0]) {
+          return connect[0];
+        } else if (disconnect && disconnect[0]) {
+          return null;
+        } else {
+          return currentValue || null;
+        }
       }
     });
 
