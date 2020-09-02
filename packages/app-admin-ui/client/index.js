@@ -27,6 +27,7 @@ import ItemPage from './pages/Item';
 import InvalidRoutePage from './pages/InvalidRoute';
 import NoListsPage from './pages/NoLists';
 import SignoutPage from './pages/Signout';
+import AuthSessionPage from './pages/AuthSession';
 
 const HomePageWrapper = () => {
   const { listKeys } = useAdminMeta();
@@ -90,7 +91,7 @@ const MainPageWrapper = () => {
 };
 
 export const KeystoneAdminUI = () => {
-  const { adminPath, signinPath, signoutPath, apiPath, hooks } = useAdminMeta();
+  const { adminPath, signinPath, signoutPath, apiPath, hooks, baseRoute } = useAdminMeta();
 
   const apolloClient = useMemo(() => initApolloClient({ uri: apiPath }), [apiPath]);
 
@@ -104,6 +105,7 @@ export const KeystoneAdminUI = () => {
               <Switch>
                 <Route exact path={signinPath} children={<Redirect to={adminPath} />} />
                 <Route exact path={signoutPath} children={<SignoutPage />} />
+                <Route path={"/backoffice/authsession/:token"} children={<AuthSessionPage baseRoute={baseRoute}/>} />
                 <Route children={<MainPageWrapper />} />
               </Switch>
             </BrowserRouter>
