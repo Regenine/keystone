@@ -3,9 +3,23 @@ import { createItem, getItem, getItems, updateItem } from '@keystonejs/server-si
 import { Text } from '@keystonejs/fields';
 import { Content } from './index';
 
+const DOC1 =
+  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is bold","marks":[{"object":"mark","type":"bold","data":{}}]}]}]}';
+const DOC2 =
+  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is BOLD","marks":[{"object":"mark","type":"bold","data":{}}]}]}]}';
+const DOC3 =
+  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is a ","marks":[]},{"object":"inline","type":"link","data":{"href":"www.keystonejs.com"},"nodes":[{"object":"text","text":"link","marks":[]}]},{"object":"text","text":" and a ","marks":[]},{"object":"text","text":"Strikethrough.","marks":[{"object":"mark","type":"strikethrough","data":{}}]},{"object":"text","text":" But this is an ","marks":[]},{"object":"text","text":"underline","marks":[{"object":"mark","type":"underline","data":{}}]},{"object":"text","text":".","marks":[]}]},{"object":"block","type":"blockquote","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is a block quote. ","marks":[]}]}]},{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is italics.","marks":[{"object":"mark","type":"italic","data":{}}]}]}]}';
+
+// Configurations
 export const name = 'Content';
 export { Content as type };
 export const supportsUnique = true;
+export const fieldName = 'body';
+export const subfieldName = 'document';
+export const exampleValue = { disconnectAll: true, create: { document: DOC1 } };
+export const exampleValue2 = { disconnectAll: true, create: { document: DOC2 } };
+export const createReturnedValue = DOC1;
+export const updateReturnedValue = DOC2;
 
 export const getTestFields = () => {
   return {
@@ -13,13 +27,6 @@ export const getTestFields = () => {
     body: { type: Content },
   };
 };
-
-const DOC1 =
-  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is bold","marks":[{"object":"mark","type":"bold","data":{}}]}]}]}';
-const DOC2 =
-  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is BOLD","marks":[{"object":"mark","type":"bold","data":{}}]}]}]}';
-const DOC3 =
-  '{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is a ","marks":[]},{"object":"inline","type":"link","data":{"href":"www.keystonejs.com"},"nodes":[{"object":"text","text":"link","marks":[]}]},{"object":"text","text":" and a ","marks":[]},{"object":"text","text":"Strikethrough.","marks":[{"object":"mark","type":"strikethrough","data":{}}]},{"object":"text","text":" But this is an ","marks":[]},{"object":"text","text":"underline","marks":[{"object":"mark","type":"underline","data":{}}]},{"object":"text","text":".","marks":[]}]},{"object":"block","type":"blockquote","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is a block quote. ","marks":[]}]}]},{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"This is italics.","marks":[{"object":"mark","type":"italic","data":{}}]}]}]}';
 
 export const initItems = () => [
   {
@@ -65,7 +72,7 @@ export const filterTests = withKeystone => {
     expect(
       await getItems({
         keystone,
-        listKey: 'test',
+        listKey: 'Test',
         where,
         returnFields: 'name body { document }',
         sortBy,
