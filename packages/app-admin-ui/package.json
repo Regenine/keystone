@@ -1,15 +1,13 @@
 {
-  "name": "@keystonejs/app-admin-ui",
-  "description": "KeystoneJS Admin UI App.",
-  "version": "7.3.3",
+  "name": "@tithon/app-admin-ui",
+  "description": "Tithon Admin UI App.",
+  "version": "0.0.1",
   "author": "The KeystoneJS Development Team",
   "license": "MIT",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "axios": "^0.20.0",
-    "base64url": "^3.0.1",
     "@apollo/client": "^3.1.4",
     "@arch-ui/alert": "^0.0.18",
     "@arch-ui/badge": "^0.0.17",
@@ -48,9 +46,11 @@
     "@types/react": "^16.9.49",
     "apollo-upload-client": "^14.1.1",
     "apply-ref": "^0.2.3",
+    "axios": "^0.20.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-emotion": "^10.0.33",
     "babel-preset-react-app": "^9.1.2",
+    "base64url": "^3.0.1",
     "clipboard-copy": "^3.1.0",
     "compression": "^1.7.4",
     "cross-fetch": "^3.0.5",
@@ -83,5 +83,5 @@
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
   },
-  "repository": "https://github.com/keystonejs/keystone/tree/master/packages/app-admin-ui"
+  "repository": "https://github.com/Regenine/keystone/tree/master/packages/app-admin-ui"
 }
