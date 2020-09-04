@@ -23,7 +23,9 @@ module.exports = function({ adminMeta, adminViews, entry, outputPath }) {
     {
       test: /\.(js|ts|tsx)$/,
       exclude: pathname => {
-        return pathname.includes('node_modules') && !pathname.startsWith(clientDirectory);
+        // allow cross-referring between client modules
+        const altClientDirectory = clientDirectory.replace('@tithon', '@keystonejs');
+        return pathname.includes('node_modules') && !(pathname.startsWith(clientDirectory) || pathname.startsWith(altClientDirectory));
       },
       use: [
         {
