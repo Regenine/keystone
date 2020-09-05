@@ -13,7 +13,7 @@ import { colors } from '@arch-ui/theme';
 
 import Animation from '../components/Animation';
 import { useAdminMeta } from '../providers/AdminMeta';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import base64url from 'base64url';
 
@@ -33,7 +33,7 @@ const Container = props => <FlexBox css={{ minHeight: '100vh' }} {...props} />;
 
 const Caption = props => <p css={{ fontSize: '1.5em' }} {...props} />;
 
-const authSession = async (token, baseRoute) => {
+const authSession = async (token, baseRoute, redirect) => {
   // token is base 64 url encoded and needs to be unencoded before being placed in the header
   const plainToken = base64url.decode(token);
 
@@ -43,18 +43,20 @@ const authSession = async (token, baseRoute) => {
 
   const result = await axios.get(`${baseRoute}/auth/adminuisession`, options);
 
-  console.log(result);
+  console.log('redirecting to ', redirect);
+
+  useHistory().push(redirect);
 
 }
 
 const AuthSessionPage = ({baseRoute}) => {
   const authorising = true;
-  const { token } = useParams();
+  const { token, redirect } = useParams();
 
-  authSession(token, baseRoute);
+  authSession(token, baseRoute, decodeURIComponent(redirect));
   return (
     <Container>
-      {piggybacking ? (
+      {authorising ? (
         <Fragment>
           <LoadingIndicator css={{ height: '3em' }} size={12} />
           <Caption>Authorising session.</Caption>
