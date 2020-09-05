@@ -37,7 +37,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-const authSession = async (token, baseRoute) => {
+const authSession = async (token, baseRoute, decodedRedirect) => {
   // token is base 64 url encoded and needs to be unencoded before being placed in the header
   const plainToken = base64url.decode(token);
   const options = {
@@ -45,8 +45,6 @@ const authSession = async (token, baseRoute) => {
   };
 
   await actuallyAuthorise(`${baseRoute}/auth/adminuisession`, options);
-  const redirect = useQuery().get('redirect');
-  const decodedRedirect = decodeURIComponent(redirect);
   useHistory().push(decodedRedirect);
 }
 
@@ -56,7 +54,9 @@ const actuallyAuthorise = async (url, options) => {
 
 const AuthSessionPage =  ({baseRoute}) => {
   const { token } = useParams();
-  authSession(token, baseRoute);
+  const redirect = useQuery().get('redirect');
+  const decodedRedirect = decodeURIComponent(redirect);
+  authSession(token, baseRoute, decodedRedirect);
   return (
     <Container>
         <Fragment>
