@@ -105,7 +105,7 @@ export const KeystoneAdminUI = () => {
               <Switch>
                 <Route exact path={signinPath} children={<Redirect to={adminPath} />} />
                 <Route exact path={signoutPath} children={<SignoutPage />} />
-                <Route path={"/backoffice/authsession/:token/:redirect"} children={<AuthSessionPage baseRoute={baseRoute}/>} />
+                <Route path={"/backoffice/authsession/:token"} children={<AuthSessionPage baseRoute={baseRoute}/>} />
                 <Route children={<MainPageWrapper />} />
               </Switch>
             </BrowserRouter>

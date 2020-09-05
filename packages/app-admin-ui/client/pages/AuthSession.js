@@ -13,7 +13,7 @@ import { colors } from '@arch-ui/theme';
 
 import Animation from '../components/Animation';
 import { useAdminMeta } from '../providers/AdminMeta';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import base64url from 'base64url';
 
@@ -33,33 +33,35 @@ const Container = props => <FlexBox css={{ minHeight: '100vh' }} {...props} />;
 
 const Caption = props => <p css={{ fontSize: '1.5em' }} {...props} />;
 
-const authSession = async (token, baseRoute, redirect) => {
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+const authSession = async (token, baseRoute) => {
   // token is base 64 url encoded and needs to be unencoded before being placed in the header
   const plainToken = base64url.decode(token);
-
   const options = {
     headers: {'Authorization': `Bearer ${plainToken}`}
   };
 
-  await authorise(`${baseRoute}/auth/adminuisession`, options);
-  console.log('redirecting to ', redirect);
-  useHistory().push(redirect);
-
+  await actuallyAuthorise(`${baseRoute}/auth/adminuisession`, options);
+  const redirect = useQuery().get('redirect');
+  const decodedRedirect = decodeURIComponent(redirect);
+  useHistory().push(decodedRedirect);
 }
 
-const authorise = async (url, options) => {
+const actuallyAuthorise = async (url, options) => {
   return await axios.get(url, options);
 }
 
 const AuthSessionPage =  ({baseRoute}) => {
-  const { token, redirect } = useParams();
-  const decodedRedirect = decodeURIComponent(redirect);
-  authSession(token, baseRoute, decodedRedirect);
+  const { token } = useParams();
+  authSession(token, baseRoute);
   return (
     <Container>
         <Fragment>
           <LoadingIndicator css={{ height: '3em' }} size={12} />
-          <Caption>Authorising session.</Caption>
+          <Caption>Authorising session</Caption>
         </Fragment>
     </Container>
   );
