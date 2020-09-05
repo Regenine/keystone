@@ -41,34 +41,26 @@ const authSession = async (token, baseRoute, redirect) => {
     headers: {'Authorization': `Bearer ${plainToken}`}
   };
 
-  const result = await axios.get(`${baseRoute}/auth/adminuisession`, options);
-
+  await authorise(`${baseRoute}/auth/adminuisession`, options);
   console.log('redirecting to ', redirect);
-
   useHistory().push(redirect);
 
 }
 
-const AuthSessionPage = ({baseRoute}) => {
-  const authorising = true;
-  const { token, redirect } = useParams();
+const authorise = async (url, options) => {
+  return await axios.get(url, options);
+}
 
-  authSession(token, baseRoute, decodeURIComponent(redirect));
+const AuthSessionPage =  ({baseRoute}) => {
+  const { token, redirect } = useParams();
+  const decodedRedirect = decodeURIComponent(redirect);
+  authSession(token, baseRoute, decodedRedirect);
   return (
     <Container>
-      {authorising ? (
         <Fragment>
           <LoadingIndicator css={{ height: '3em' }} size={12} />
           <Caption>Authorising session.</Caption>
         </Fragment>
-      ) : (
-        <Fragment>
-          <Animation name="pulse" duration="500ms">
-            <CheckIcon css={{ color: colors.primary, height: '3em', width: '3em' }} />
-          </Animation>
-          <Caption>You have been authorised.</Caption>
-        </Fragment>
-      )}
     </Container>
   );
 };
