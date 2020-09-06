@@ -1,7 +1,7 @@
 {
   "name": "@tithon/app-admin-ui",
   "description": "Tithon Admin UI App.",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "The KeystoneJS Development Team",
   "license": "MIT",
   "engines": {
@@ -38,11 +38,11 @@
     "@babel/core": "^7.11.5",
     "@babel/runtime": "^7.11.2",
     "@emotion/core": "^10.0.35",
-    "@keystonejs/fields": "^17.1.0",
     "@keystonejs/field-views-loader": "^6.0.0",
     "@keystonejs/session": "^8.1.1",
     "@keystonejs/utils": "^5.4.3",
     "@primer/octicons-react": "^10.1.0",
+    "@tithon/keystonefields": "^0.0.3",
     "@types/react": "^16.9.49",
     "apollo-upload-client": "^14.1.1",
     "apply-ref": "^0.2.3",
