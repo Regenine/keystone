@@ -41,12 +41,11 @@ const authSession = async (token64, baseRoute, redirect64) => {
     headers: {'Authorization': `Bearer ${token}`}
   };
 
-  await actuallyAuthorise(`${baseRoute}/auth/adminuisession`, options);
-  useHistory().push(redirect);
+  await actuallyAuthorise(`${baseRoute}/auth/adminuisession`, redirect, options);
 }
 
-const actuallyAuthorise = async (url, options) => {
-  return await axios.get(url, options);
+const actuallyAuthorise = async (url, redirect, options) => {
+  return await axios.post(url, {redirect}, options);
 }
 
 const AuthSessionPage =  ({baseRoute}) => {
