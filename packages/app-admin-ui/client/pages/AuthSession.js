@@ -2,7 +2,7 @@
 
 import { jsx } from '@emotion/core';
 
-import { Fragment } from 'react';
+import { Fragment, Component } from 'react';
 
 import { gql, useMutation } from '@apollo/client';
 
@@ -10,10 +10,10 @@ import { CheckIcon } from '@primer/octicons-react';
 import { Button } from '@arch-ui/button';
 import { LoadingIndicator } from '@arch-ui/loading';
 import { colors } from '@arch-ui/theme';
-
+import { Redirect } from "react-router-dom";
 import Animation from '../components/Animation';
 import { useAdminMeta } from '../providers/AdminMeta';
-import { useParams, useHistory } from 'react-router-dom';
+import { withRouter } from "react-router";
 import axios from 'axios';
 import base64url from 'base64url';
 
@@ -48,17 +48,32 @@ const actuallyAuthorise = async (url, redirect, options) => {
   return await axios.post(url, {redirect}, options);
 }
 
-const AuthSessionPage =  ({baseRoute}) => {
-  const { token64, redirect64 } = useParams();
-  authSession(token64, baseRoute, redirect64);
-  return (
-    <Container>
-        <Fragment>
+class AuthSessionPage extends Component {
+  constructor(props) {
+    console.log(props);
+    super(props);
+    this.state = {authorised: false};
+  }
+
+async componentDidMount() {
+    const { token64, redirect64 } = this.props.match.params;
+    await authSession(token64, this.props.baseRoute, redirect64);
+    const redirect = base64url.decode(redirect64);
+    this.setState({authorised: true, redirect});
+}
+
+render() {
+  return (<Container>
+     { !this.state.authorised ? 
+        (<Fragment>
           <LoadingIndicator css={{ height: '3em' }} size={12} />
           <Caption>Authorising session</Caption>
-        </Fragment>
-    </Container>
-  );
-};
+        </Fragment>) :
+    (<Redirect to={this.state.redirect}/>)
+        }
+    </Container>) 
+  
+  };
+}
 
-export default AuthSessionPage;
+export default withRouter(AuthSessionPage);
