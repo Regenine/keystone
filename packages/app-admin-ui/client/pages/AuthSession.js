@@ -13,7 +13,7 @@ import { colors } from '@arch-ui/theme';
 
 import Animation from '../components/Animation';
 import { useAdminMeta } from '../providers/AdminMeta';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import base64url from 'base64url';
 
@@ -33,19 +33,16 @@ const Container = props => <FlexBox css={{ minHeight: '100vh' }} {...props} />;
 
 const Caption = props => <p css={{ fontSize: '1.5em' }} {...props} />;
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
-const authSession = async (token, baseRoute, decodedRedirect) => {
+const authSession = async (token64, baseRoute, redirect64) => {
   // token is base 64 url encoded and needs to be unencoded before being placed in the header
-  const plainToken = base64url.decode(token);
+  const token = base64url.decode(token64);
+  const redirect = base64url.decode(redirect64);
   const options = {
-    headers: {'Authorization': `Bearer ${plainToken}`}
+    headers: {'Authorization': `Bearer ${token}`}
   };
 
   await actuallyAuthorise(`${baseRoute}/auth/adminuisession`, options);
-  useHistory().push(decodedRedirect);
+  useHistory().push(redirect);
 }
 
 const actuallyAuthorise = async (url, options) => {
@@ -53,10 +50,8 @@ const actuallyAuthorise = async (url, options) => {
 }
 
 const AuthSessionPage =  ({baseRoute}) => {
-  const { token } = useParams();
-  const redirect = useQuery().get('redirect');
-  const decodedRedirect = decodeURIComponent(redirect);
-  authSession(token, baseRoute, decodedRedirect);
+  const { token64, redirect64 } = useParams();
+  authSession(token64, baseRoute, redirect64);
   return (
     <Container>
         <Fragment>
